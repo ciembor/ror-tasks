@@ -1,11 +1,11 @@
 class TodoList
 
   class Item
-  	
+    
     def initialize(description=nil)
-  	  @description = description
-  	  @completed = false
-  	end
+      @description = description
+      @completed = false
+    end
 
     def to_s
       @description.to_s
@@ -20,36 +20,36 @@ class TodoList
       "- [#{completion}] #{@description}"
     end
 
-  	attr_accessor :description, :completed
+    attr_accessor :description, :completed
   end
 
   # Initialize the TodoList with +items+ (empty by default).
   def initialize(items=[])
-  	raise IllegalArgument if items.nil?
-  	@items = []
+    raise IllegalArgument if items.nil?
+    @items = []
     items.each do |item|
       @items.push Item.new(item)
     end
   end
 
   def empty?
-  	@items.empty?
+    @items.empty?
   end
 
   def size
-  	@items.size
+    @items.size
   end
 
   def <<(item)
-  	@items.push(Item.new(item))
+    @items.push(Item.new(item))
   end
 
   def first
-  	@items.first
+    @items.first
   end
 
   def last
-  	@items.first
+    @items.first
   end
 
   def completed?(index)
@@ -57,7 +57,7 @@ class TodoList
   end
 
   def complete(index)
-  	@items[index].completed = true
+    @items[index].completed = true
   end
 
   def completed
