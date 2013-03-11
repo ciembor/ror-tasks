@@ -73,4 +73,24 @@ describe TodoList do
       list << item
     end
   end
+
+# returning nil for the first and the last item if the DB is empty
+  # context "empty database" do
+  #   it "should return nil for outmost items if the DB is empty" do
+  #     stub(database).items_count { 0 }
+
+  #     list.first.should == nil
+  #     list.last.should == nil
+  #   end
+  # end
+# raising an exception when changing the item state if the item is nil
+# not accepting a nil item
+# not accepting an item with too short (but not empty) title
+# accepting of an item with missing description
+# notifying a social network if an item is added to the list (you have to provide the social network proxy in the constructor)
+# notifying a social network if an item is completed
+# not notifying the social network if the title of the item is missing
+# notifying the social network if the body of the item is missing
+# cutting the title of the item when notifying the SN if it is longer than 255 chars (both when adding and completing the item)
+
 end
