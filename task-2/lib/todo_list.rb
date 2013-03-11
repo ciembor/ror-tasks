@@ -28,7 +28,7 @@ class TodoList
 
   def toggle_state(index)
   	item = @db.get_todo_item(index)
-  	# @db.complete_todo_item(item, !item.completed?)
+  	@db.complete_todo_item(item, item.complete ? false : true)
   end
 
 end
