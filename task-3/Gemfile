@@ -1,7 +1,10 @@
 source "http://www.rubygems.org"
 
-group :test do
+group :test, :development do
   gem 'rspec'
   gem 'rr'
   gem 'capybara', :git => 'git://github.com/jnicklas/capybara.git'
+  gem 'rb-inotify'
+  gem 'guard'
+  gem 'guard-rspec'
 end
