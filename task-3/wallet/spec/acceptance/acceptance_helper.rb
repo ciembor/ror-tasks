@@ -3,12 +3,28 @@ require 'capybara/rspec'
 require 'wallet'
 require 'exchanger'
 
+class BankAccount
 
-@wallet = Wallet.new
-@exchanger = Exchanger.new
+  def initialize(options)
+    @money = options[:money]
+  end
+
+  def download_money(money)
+    money
+  end
+
+end
+
+def setup_wallet 
+  @wallet = Wallet.new
+end
+
+def setup_exchanger
+  @exchanger = Exchanger.new
+end
 
 def setup_bank_account(options)
-  @bank_account = options # TODO stub or real class
+  @bank_account = BankAccount.new(options) # TODO stub or real class
 end
 
 def setup_currency_exchange_table(hash_table)
@@ -24,9 +40,15 @@ def bank_account_status
 end
 
 def download_money_from_bank(money_tuple)
-  @wallet.supply(
+  @wallet.supply_money(
     @bank_account.download_money(money_tuple)
   )
+end
+
+def upload_money_to_the_bank(money)
+  money.each { |tuple| 
+    @wallet.take_money({tuple[0] => tuple[1]})
+  }
 end
 
 def money_in_wallet

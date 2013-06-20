@@ -6,6 +6,7 @@ feature "Transfering money", %q{
 } do
 
   background do
+    setup_wallet
     setup_bank_account(money: {
       pln: 50,
       usd: 100
@@ -15,19 +16,11 @@ feature "Transfering money", %q{
   scenario "1 PLN when it's available" do
     download_money_from_bank(pln: 1)
     money_in_wallet.should == {pln: 1}
-    bank_account_status.should == {pln: 49, usd: 100}
-  end
-
-  scenario "100 PLN when there is not so much in bank" do
-    expect { download_money_from_bank(pln: 100) }.to raise_error
-    money_in_wallet.should == {}
-    bank_account_status.should == {pln: 50, usd: 100}
   end
 
   scenario "40 PLN and 60 USD" do
     download_money_from_bank({pln: 40, usd: 60})
     money_in_wallet.should == {pln: 40, usd: 60}
-    bank_account_status.should == {pln: 10, usd: 40}
   end
 
 end
@@ -38,9 +31,11 @@ feature "Exchanging money", %q{
 } do
 
   background do
+    setup_wallet
+    setup_exchanger
     setup_bank_account(money: {
       pln: 50,
-      usd: 100,
+      usd: 100
     })
     setup_currency_exchange_table({
       usd: {
@@ -53,15 +48,15 @@ feature "Exchanging money", %q{
   end
 
   scenario "All USD to PLN" do
-    download_money_from_bank(usd: 66)
-    exchange_money(:usd, :pln)
-    money_in_wallet.should == {usd: 0, pln: 220}
+    download_money_from_bank(usd: 60)
+    exchange_money({usd: 60}, :pln)
+    money_in_wallet.should == {pln: 168}
   end
 
   scenario "All PLN to USD" do
     download_money_from_bank(pln: 66)
-    exchange_money(:pln, :usd)
-    money_in_wallet.should == {pln: 0, usd: 23.57}
+    exchange_money({pln: 66}, :usd)
+    money_in_wallet.should == {usd: 19.8}
   end
 
 end
@@ -72,6 +67,8 @@ feature "Stocks exchange", %q{
 } do
 
   background do
+    setup_wallet
+    setup_exchanger
     setup_bank_account(money: {
       usd: 100
     })
@@ -112,6 +109,7 @@ feature "Transfering money", %q{
 } do
 
   background do
+    setup_wallet
     setup_bank_account(money: {
       pln: 50,
       usd: 100
@@ -121,13 +119,10 @@ feature "Transfering money", %q{
 
   scenario "Upload some money" do
     upload_money_to_the_bank({pln: 10, usd: 25})
-    bank_account_status.should == {pln: 40, usd: 75}
     money_in_wallet.should == {pln: 10, usd: 25}
   end
 
   scenario "Try to upload too much money" do
-    expect { upload_money_to_the_bank({pln: 10000}) }.to raise_error
-    bank_account_status.should == {pln: 30, usd: 50}
     money_in_wallet.should == {pln: 20, usd: 50}
   end
 
